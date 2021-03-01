@@ -1,0 +1,13 @@
+Install tcl under Alpine linux.
+
+Downloads the latest source and compiles.
+latest as of march of 2021.
+
+
+Installs tclsh, expect, and tls.
+
+
+borrowed from https://github.com/efrecon/mini-tcl.
+
+
+
