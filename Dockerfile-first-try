@@ -1,0 +1,8 @@
+FROM alpine
+#WORKDIR /app
+#COPY package.json yarn.lock ./
+#RUN yarn install --production
+#COPY . .
+#RUN yarn install --production
+RUN apk add tcl mariadb-connector-c-dev
+CMD ["/bin/sh"]
