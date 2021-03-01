@@ -25,6 +25,9 @@ RUN	cd /work \
 	&& ./configure && make && make install
 
 
+## the install of tcltls puts the file in a weird place.. ./{usr/local/lib}/
+## there must be some weird {} substition in he makefile.
+## manually copy the tls directory under /usr/local/lib.
 
 RUN cd /work \
 	&& wget https://core.tcl-lang.org/tcltls/uv/tcltls-1.7.22.tar.gz \
@@ -34,7 +37,9 @@ RUN cd /work \
 	&& ./configure && make  && make install  \
 	&& cd {/usr/local/lib\} && mv tcltls1.7.22 /usr/local/lib
 
-CMD ["/bin/sh"]
+COPY readline.tcl readline.tcl
+
+CMD ["tclsh8.6","readline.tcl"]
 ##  82 apk add openssl-devel
 ##  83 apk add openssl-develsaf
 ##  84 apk add makeupshit
