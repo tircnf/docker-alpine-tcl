@@ -7,68 +7,41 @@ FROM alpine
 #RUN apk add tcl mariadb-connector-c-dev
 #CMD ["/bin/sh"]
 
-## required to compile.  remove from the image when done.
-## along with 'work'
-RUN apk add build-base
-RUN mkdir /work && cd /work \
+## installs tcl8.6.11 
+## expect 5.45.4  (for tclreadline)
+## tls            (for hopeful creation of secure sockets)
+## mariadb-connecgtor-j    (to connect to mysql).
+
+## remove 'work' and extra dependencies when done.
+RUN  \
+	apk add build-base openssl-dev \
+	&& apk add mariadb-connector-c-dev \
+	&& mkdir /work && cd /work \
 	&& wget https://prdownloads.sourceforge.net/tcl/tcl8.6.11-src.tar.gz \
 	&& tar zxvf tcl8.6.11-src.tar.gz \	
   	&& cd tcl8.6.11/unix \
 	&& ./configure --enable-threads \
-	&& make && make install 
-
-RUN	cd /work \
+	&& make && make install  \
+	&& cd /work \
 	&& wget https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz/download \
   	&& mv download  expect5.45.4.tgz \
   	&& tar zxvf expect5.45.4.tgz \
   	&& cd expect5.45.4 \
-	&& ./configure && make && make install
-
-
-## the install of tcltls puts the file in a weird place.. ./{usr/local/lib}/
-## there must be some weird {} substition in he makefile.
-## manually copy the tls directory under /usr/local/lib.
-
-RUN cd /work \
+	&& ./configure && make && make install \
+	&& cd /work \
 	&& wget https://core.tcl-lang.org/tcltls/uv/tcltls-1.7.22.tar.gz \
         && tar zxvf tcltls-1.7.22.tar.gz \
 	&& cd tcltls-1.7.22 \
-        && apk add openssl-dev \
 	&& ./configure && make  && make install  \
-	&& cd {/usr/local/lib\} && mv tcltls1.7.22 /usr/local/lib
+	&& cd {/usr/local/lib\} && mv tcltls1.7.22 /usr/local/lib \
+	&& apk del build-base openssl-dev \
+	&& rm -rf /work
 
 COPY readline.tcl readline.tcl
 
-CMD ["tclsh8.6","readline.tcl"]
-##  82 apk add openssl-devel
-##  83 apk add openssl-develsaf
-##  84 apk add makeupshit
-##  85 apk add libssl-dev
-##  86 apk add libssl
-##  87 apk add pkg-config
-##  88 apk add openssl-dev
-##  88 apk add openssl-dev
-##  89 ./configure
-##  90 make
-##  91 make install
-##  92 tclsh
-##  93 tclsh8.6
-##  94 cd ..
-##  95 tclsh8.6
-##  96 ls -al
-##  97 cd tcltls-1.7.22/
-##  98 ls -al
-##  99 ./configure
-## 100 make
-## 101 make install
-## 102 ls -al
-## 103 cd {
-## 104 ls -al
-## 105 cd usr/
-## 106 ls -al
-## 107 cd local/
-## 108 ls -al
-## 109 cd lib\}/
-## 110 ls -al
-## 111 mv tcltls1.7.22/ /usr/local/lib
-##
+RUN  ln -sf /usr/local/bin/tclsh8.6 /usr/local/bin/tclsh
+
+
+
+#CMD ["tclsh8.6","readline.tcl"]
+CMD ["/bin/sh"]

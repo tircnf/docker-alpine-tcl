@@ -58,6 +58,7 @@ namespace eval TclReadLine {
 
     # Initialise our own env variables:
     variable PROMPT ">"
+    variable PROMPT {\033\[36mtclsh-[info patchlevel]\033\[0m \[\033\[34m[file tail [pwd]\033\[0m]\]\033\[31m % \033\[0m}
     variable COMPLETION_MATCH ""
     
     # Support extensions to the completion handling
