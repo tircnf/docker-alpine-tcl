@@ -7,11 +7,16 @@ FROM alpine
 #RUN apk add tcl mariadb-connector-c-dev
 #CMD ["/bin/sh"]
 
+
 ## installs tcl8.6.11 
 ## expect 5.45.4  (for tclreadline)
 ## tls            (for hopeful creation of secure sockets)
 ## mariadb-connecgtor-j    (to connect to mysql).
+##
+## don't remember why I added mariadb-connector-c-dev.
+## maybe a typo or something?
 
+COPY readline.tcl readline.tcl
 ## remove 'work' and extra dependencies when done.
 RUN  \
 	apk add build-base openssl-dev \
@@ -35,11 +40,8 @@ RUN  \
 	&& ./configure && make  && make install  \
 	&& cd {/usr/local/lib\} && mv tcltls1.7.22 /usr/local/lib \
 	&& apk del build-base openssl-dev \
-	&& rm -rf /work
-
-COPY readline.tcl readline.tcl
-
-RUN  ln -sf /usr/local/bin/tclsh8.6 /usr/local/bin/tclsh
+	&& rm -rf /work \
+	&& ln -sf /usr/local/bin/tclsh8.6 /usr/local/bin/tclsh
 
 
 
