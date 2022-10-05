@@ -65,3 +65,10 @@ COPY readline.tcl ./
 
 #CMD ["tclsh8.6","readline.tcl"]
 CMD ["/bin/sh"]
+
+
+
+## fun way to run under cygwin, and allow mounting current directory:
+
+#  docker run --rm -it  -v "`cygpath -am .`:/work" mburns/alpine-tcl
+
