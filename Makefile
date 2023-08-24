@@ -8,6 +8,8 @@ docker:
 
 
 runtcl:
-	docker run --rm -it  -v "`cygpath -am .`:/work" tcl
+	docker run --rm -it  -v "`cygpath -am .`:/work" mburns/alpine-tcl
 
+runtclmac:
+	docker run --rm -it  -v "`pwd`:/work" mburns/alpine-tcl
 	
